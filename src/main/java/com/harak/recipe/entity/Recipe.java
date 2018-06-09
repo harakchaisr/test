@@ -1,7 +1,9 @@
 package com.harak.recipe.entity;
 
 import javax.persistence.*;
+
 import java.util.HashSet;
+
 import java.util.Set;
 
 @Entity
@@ -17,6 +19,7 @@ public class Recipe {
 
     private String description;
     private Integer preTime;
+
 
 
     private Integer cookTime;
@@ -40,6 +43,13 @@ public class Recipe {
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
     }
+
+
+    private Integer cookTime;
+    private Integer servtime;
+    private String source;
+    private String url;
+
 
     public String getDescription() {
         return description;
@@ -118,11 +128,19 @@ public class Recipe {
     @Lob
     private byte[] image;
 
+
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients = new HashSet<>();
+
+    @OneToOne
+    private Notes notes;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients;
+
 
     public Long getId() {
         return id;
@@ -135,6 +153,7 @@ public class Recipe {
     public void setIngredients(Set<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
+
 
     @ManyToMany
     @JoinTable(name = "recipe_category",
@@ -163,4 +182,5 @@ public class Recipe {
         this.ingredients.add(ingredient);
         return this;
     }
+
 }
