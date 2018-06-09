@@ -1,7 +1,15 @@
 package com.harak.recipe.entity;
 
+
+import lombok.*;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
+@Data
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+
 @Entity
 
 public class Ingredient {
@@ -11,6 +19,16 @@ public class Ingredient {
     private String description;
     private BigDecimal amount;
 
+
+    public Ingredient(){
+
+    }
+
+    public Ingredient(String ripe_avocados, BigDecimal bigDecimal, UnitOfMeasure eachUom) {
+    }
+
+    @OneToOne(fetch = FetchType.EAGER)
+
     public UnitOfMeasure getUom() {
         return uom;
     }
@@ -19,6 +37,7 @@ public class Ingredient {
         this.uom = uom;
     }
 @OneToOne(fetch = FetchType.EAGER)
+
     private UnitOfMeasure uom;
 
     @ManyToOne
@@ -55,4 +74,5 @@ public class Ingredient {
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
+
 }

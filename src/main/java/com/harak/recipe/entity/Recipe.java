@@ -1,6 +1,9 @@
 package com.harak.recipe.entity;
 
 import javax.persistence.*;
+
+import java.util.HashSet;
+
 import java.util.Set;
 
 @Entity
@@ -16,10 +19,37 @@ public class Recipe {
 
     private String description;
     private Integer preTime;
+
+
+
+    private Integer cookTime;
+    private Integer servtime;
+
+
+    private String source;
+    private String url;
+
+    @Lob
+    private String directions;
+
+
+    @Enumerated(value = EnumType.STRING)
+    private Difficulty difficulty;
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+
     private Integer cookTime;
     private Integer servtime;
     private String source;
     private String url;
+
 
     public String getDescription() {
         return description;
@@ -98,11 +128,19 @@ public class Recipe {
     @Lob
     private byte[] image;
 
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Notes notes;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients = new HashSet<>();
+
     @OneToOne
     private Notes notes;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients;
+
 
     public Long getId() {
         return id;
@@ -115,4 +153,34 @@ public class Recipe {
     public void setIngredients(Set<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
+
+
+    @ManyToMany
+    @JoinTable(name = "recipe_category",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories = new HashSet<>();
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
+    public String getDirections() {
+        return directions;
+    }
+
+    public void setDirections(String directions) {
+        this.directions = directions;
+    }
+
+    public Recipe addIngredient(Ingredient ingredient){
+        ingredient.setRecipe(this);
+        this.ingredients.add(ingredient);
+        return this;
+    }
+
 }
